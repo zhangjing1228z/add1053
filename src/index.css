@@ -1,1 +1,248 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Noto Serif SC", "Songti SC", serif;
+  --font-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "IBM Plex Mono", "Noto Sans SC", monospace;
+
+  --color-espresso-950: #140d08;
+  --color-espresso-900: #1c120c;
+  --color-espresso-850: #241811;
+  --color-espresso-800: #2c1f15;
+  --color-espresso-700: #3c2a1d;
+  --color-espresso-600: #55392a;
+  --color-espresso-500: #715138;
+
+  --color-cream-50: #faf3e7;
+  --color-cream-100: #f4e8d5;
+  --color-cream-200: #e8d5ba;
+  --color-cream-300: #d2b795;
+  --color-cream-400: #b69877;
+  --color-cream-500: #997d5f;
+
+  --color-honey-200: #f8d99c;
+  --color-honey-300: #f2c472;
+  --color-honey-400: #e9ac4c;
+  --color-honey-500: #dd9532;
+  --color-honey-600: #b87622;
+  --color-honey-700: #8f5a1a;
+
+  --color-moss-300: #b9c08a;
+  --color-moss-400: #a2ab72;
+  --color-moss-500: #87914f;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-espresso-900);
+  color: var(--color-cream-100);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---- 颗粒噪点覆层 ---- */
+.noise-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--color-honey-400);
+  color: var(--color-espresso-950);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-espresso-600) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-espresso-600);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---- 关键帧 ---- */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes line-up {
+  from {
+    transform: translateY(112%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes marquee-x {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-11px);
+  }
+}
+@keyframes badge-pop {
+  0% {
+    transform: scale(0.3);
+  }
+  60% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes dot-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(233, 172, 76, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 9px rgba(233, 172, 76, 0);
+  }
+}
+@keyframes draw-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes steam-rise {
+  0% {
+    transform: translateY(6px) scaleX(0.96);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-14px) scaleX(1.04);
+    opacity: 0;
+  }
+}
+
+/* ---- 组件类 ---- */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.mask-line > span {
+  display: block;
+  transform: translateY(112%);
+  animation: line-up 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+.anim-rise {
+  animation: rise-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.anim-backdrop {
+  animation: backdrop-in 0.3s ease both;
+}
+.anim-marquee {
+  animation: marquee-x 36s linear infinite;
+}
+.anim-spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+.anim-floaty {
+  animation: floaty 5.5s ease-in-out infinite;
+}
+.anim-pop {
+  animation: badge-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.anim-dot {
+  animation: dot-pulse 2.2s ease-out infinite;
+}
+.steam-wisp {
+  animation: steam-rise 3.4s ease-in-out infinite;
+}
+
+.check-draw {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: draw-stroke 0.7s 0.25s ease forwards;
+}
+.circle-draw {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: draw-stroke 0.9s ease forwards;
+}
+
+.outline-text {
+  -webkit-text-stroke: 1px rgba(244, 232, 213, 0.14);
+  color: transparent;
+}
+
+/* ---- 减少动态偏好 ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .mask-line > span {
+    transform: none;
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
